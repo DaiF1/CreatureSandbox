@@ -47,7 +47,7 @@ function CreatureEye({x = 0, y = 0, radius = 0, dragging = false}: CreatureEyePr
 
     useEffect(() => {
         function onTouchMove(e: TouchEvent) {
-            if (e.targetTouches.length !== 0)
+            if (e.targetTouches.length > 1)
                 return;
 
             updatePupilPosition(e.targetTouches[0].clientX, e.targetTouches[0].clientY);
