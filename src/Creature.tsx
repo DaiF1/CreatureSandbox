@@ -1,52 +1,9 @@
 import {useEffect, useState} from "react"
+import {boneRadius, boneOffset, NodeProps, ArmatureNode} from "./ArmatureNode"
 
 import './Creature.css'
 
-const boneRadius = 12; // 7px radius + 5px border
-const boneOffset = 30; // 30px
-
 const defaultBodyRadius = 20;
-
-interface NodeProps {
-    x: number,
-    y: number,
-    radius: number,
-};
-
-interface ArmatureNodeProps {
-    x: number,
-    y: number,
-    radius: number,
-    color: string,
-    showBones: boolean,
-}
-
-export function ArmatureNode({ x = 0, y = 0, radius = 0, color = "", showBones = false } : ArmatureNodeProps) {
-    return (
-        <>
-            <div className="armature-node"
-                style={
-                    {
-                        left: x - boneRadius,
-                        top: y - boneRadius,
-                        display: showBones ? "block" : "none",
-                    }
-                }
-            ></div>
-            <div className="body-node"
-                style={
-                    {
-                        left: x - radius,
-                        top: y - radius,
-                        width: radius * 2,
-                        height: radius * 2,
-                        backgroundColor: color,
-                    }
-                }
-            ></div>
-        </>
-    )
-}
 
 interface CreatureProps {
     boneCount: number,
@@ -58,7 +15,7 @@ export function Creature({boneCount = 0, showBones = false, color = ""}: Creatur
     const [headX, setHeadX] = useState<number>(window.innerWidth / 2 -
                                                window.innerWidth * 0.1); // Config panel offset
     const [headY, setHeadY] = useState<number>(window.innerHeight / 2);
-    const [headRadius, setHeadRadius] = useState<number>(30);
+    const headRadius = 30; // Change that to a useState when adding size controls
 
     const [dragging, setDragging] = useState<boolean>(false);
 
@@ -120,12 +77,6 @@ export function Creature({boneCount = 0, showBones = false, color = ""}: Creatur
                      left: headX - boneRadius,
                      top: headY - boneRadius,
                      display: showBones ? "block" : "none",
-                 }}
-                 onMouseDown={() => {
-                    setDragging(true);
-                 }}
-                 onMouseUp={() => {
-                     setDragging(false);
                  }}
                  >
              </div>
