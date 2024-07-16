@@ -39,34 +39,51 @@ export function Creature({boneCount = 0, showBones = false, color = ""}: Creatur
         }
     }, [boneCount]);
 
+    const updateCreaturePositions = (x: number, y: number) => {
+        setHeadX(x);
+        setHeadY(y);
+
+        let prev = { x: x, y: y };
+        for (let node of nodes) {
+            let dx = node.x - prev.x;
+            let dy = node.y - prev.y;
+
+            let mag = Math.sqrt(dx * dx + dy * dy);
+
+            let norm_dx = dx / mag;
+            let norm_dy = dy / mag;
+
+            node.x = prev.x + norm_dx * boneOffset;
+            node.y = prev.y + norm_dy * boneOffset;
+
+            prev = node;
+        }
+    }
+
     useEffect(() => {
         const onMouseMove = (e: MouseEvent) => {
             if (!dragging)
                 return;
-            
-            setHeadX(e.clientX - boneRadius);
-            setHeadY(e.clientY - boneRadius);
 
-            let prev = { x: e.clientX - boneRadius, y: e.clientY - boneRadius };
-            for (let node of nodes) {
-                let dx = node.x - prev.x;
-                let dy = node.y - prev.y;
-
-                let mag = Math.sqrt(dx * dx + dy * dy);
-
-                let norm_dx = dx / mag;
-                let norm_dy = dy / mag;
-
-                node.x = prev.x + norm_dx * boneOffset;
-                node.y = prev.y + norm_dy * boneOffset;
-
-                prev = node;
-            }
+            updateCreaturePositions(e.clientX, e.clientY);
         }
 
         window.addEventListener('mousemove', onMouseMove);
 
         return () => window.removeEventListener('mousemove', onMouseMove);
+    }, [dragging])
+
+    useEffect(() => {
+        const onTouchMove = (e: TouchEvent) => {
+            if (!dragging || e.targetTouches.length > 1)
+                return;
+
+            updateCreaturePositions(e.targetTouches[0].clientX, e.targetTouches[0].clientY);
+        }
+
+        window.addEventListener('touchmove', onTouchMove);
+
+        return () => window.removeEventListener('touchmove', onTouchMove);
     }, [dragging])
 
     return (
@@ -89,9 +106,15 @@ export function Creature({boneCount = 0, showBones = false, color = ""}: Creatur
                          backgroundColor: color,
                      }}
                  onMouseDown={() => {
-                    setDragging(true);
+                     setDragging(true);
                  }}
                  onMouseUp={() => {
+                     setDragging(false);
+                 }}
+                 onTouchStart={() => {
+                     setDragging(true);
+                 }}
+                 onTouchEnd={() => {
                      setDragging(false);
                  }}
                  >
