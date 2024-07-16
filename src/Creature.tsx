@@ -34,22 +34,15 @@ export function Creature({boneCount = 0}: CreatureProps) {
     const [dragging, setDragging] = useState<boolean>(false);
 
     const [nodes, setNodes] = useState<NodeProps[]>([]);
+    const [test, setTest] = useState("");
 
     useEffect(() => {
         if (boneCount - 1 > nodes.length) {
-            let newNodes = [];
-
-
             let lastNode = { x: headX, y: headY };
             if (nodes.length != 0)
                 lastNode = nodes[nodes.length - 1];
 
-            let count = boneCount - nodes.length;
-            for (let i = 1; i < count; i++) { // Skip the head
-                newNodes.push({ x: lastNode.x - i * 50, y: lastNode.y });
-            }
-
-            setNodes(nodes.concat(newNodes));
+            setNodes([...nodes, { x: lastNode.x - 50, y: lastNode.y }]);
         }
         else {
             let newNodes = nodes.slice(0, boneCount - 1);
@@ -64,6 +57,22 @@ export function Creature({boneCount = 0}: CreatureProps) {
             
             setHeadX(e.clientX - 10);
             setHeadY(e.clientY - 10);
+
+            let prev = { x: e.clientX - 10, y: e.clientY - 10 };
+            for (let node of nodes) {
+                let dx = node.x - prev.x;
+                let dy = node.y - prev.y;
+
+                let mag = Math.sqrt(dx * dx + dy * dy);
+
+                let norm_dx = dx / mag;
+                let norm_dy = dy / mag;
+
+                node.x = prev.x + norm_dx * 50;
+                node.y = prev.y + norm_dy * 50;
+
+                prev = node;
+            }
         }
 
         window.addEventListener('mousemove', onMouseMove);
@@ -86,6 +95,7 @@ export function Creature({boneCount = 0}: CreatureProps) {
              </div>
             {nodes.map(node => <ArmatureNode x={node.x} y={node.y}></ArmatureNode>)
             }
+            {test}
             </div>
         </>
     )
