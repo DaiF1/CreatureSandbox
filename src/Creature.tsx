@@ -27,18 +27,35 @@ interface CreatureProps {
 }
 
 export function Creature({boneCount = 0}: CreatureProps) {
-    const [headX, setHeadX] = useState<number>(window.innerWidth / 2);
+    const [headX, setHeadX] = useState<number>(window.innerWidth / 2 -
+                                               window.innerWidth * 0.1); // Config panel offset
     const [headY, setHeadY] = useState<number>(window.innerHeight / 2);
 
     const [dragging, setDragging] = useState<boolean>(false);
 
-    let nodeInit = [];
+    const [nodes, setNodes] = useState<NodeProps[]>([]);
 
-    for (let i = 1; i < boneCount; i++) {
-        nodeInit.push({ x: 0, y: 0 });
-    }
+    useEffect(() => {
+        if (boneCount - 1 > nodes.length) {
+            let newNodes = [];
 
-    const [nodes, setNodes] = useState<NodeProps[]>(nodeInit);
+
+            let lastNode = { x: headX, y: headY };
+            if (nodes.length != 0)
+                lastNode = nodes[nodes.length - 1];
+
+            let count = boneCount - nodes.length;
+            for (let i = 1; i < count; i++) { // Skip the head
+                newNodes.push({ x: lastNode.x - i * 50, y: lastNode.y });
+            }
+
+            setNodes(nodes.concat(newNodes));
+        }
+        else {
+            let newNodes = nodes.slice(0, boneCount - 1);
+            setNodes(newNodes);
+        }
+    }, [boneCount]);
 
     useEffect(() => {
         const onMouseMove = e => {

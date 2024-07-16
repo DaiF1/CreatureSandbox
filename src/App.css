@@ -1,0 +1,24 @@
+#config-panel {
+    color: white;
+    background-color: rgba(0,0,0,0.5);
+    padding: 10pt;
+
+    position: absolute;
+    right: 0;
+
+    width: 20vw;
+    height: 100vh;
+}
+
+.config-option {
+    display: flex;
+    justify-content: space-evenly;
+
+    width: 100%;
+
+    text-align: center;
+}
+
+.config-option * {
+    flex: 1 1 auto;
+}
