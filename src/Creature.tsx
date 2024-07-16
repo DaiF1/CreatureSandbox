@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react"
+import {useEffect, useState} from "react"
 
 import './Creature.css'
 
@@ -34,7 +34,6 @@ export function Creature({boneCount = 0}: CreatureProps) {
     const [dragging, setDragging] = useState<boolean>(false);
 
     const [nodes, setNodes] = useState<NodeProps[]>([]);
-    const [test, setTest] = useState("");
 
     useEffect(() => {
         if (boneCount - 1 > nodes.length) {
@@ -51,7 +50,7 @@ export function Creature({boneCount = 0}: CreatureProps) {
     }, [boneCount]);
 
     useEffect(() => {
-        const onMouseMove = e => {
+        const onMouseMove = (e: MouseEvent) => {
             if (!dragging)
                 return;
             
@@ -93,9 +92,8 @@ export function Creature({boneCount = 0}: CreatureProps) {
                  }}
                  >
              </div>
-            {nodes.map(node => <ArmatureNode x={node.x} y={node.y}></ArmatureNode>)
+            {nodes.map((node, index) => <ArmatureNode key={index} x={node.x} y={node.y}></ArmatureNode>)
             }
-            {test}
             </div>
         </>
     )
