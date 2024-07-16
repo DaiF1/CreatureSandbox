@@ -13,10 +13,50 @@ interface CreatureEyeProps {
     x: number,
     y: number,
     radius: number,
+    dragging: boolean,
 };
 
-function CreatureEye({x = 0, y = 0, radius = 0}: CreatureEyeProps) {
+function CreatureEye({x = 0, y = 0, radius = 0, dragging = false}: CreatureEyeProps) {
+    const [pupilX, setPupilX] = useState<number>(x);
+    const [pupilY, setPupilY] = useState<number>(y);
+
     const pupilRadius = radius * 0.7;
+
+    function updatePupilPosition(mouseX: number, mouseY: number) {
+        let dx = mouseX - x;
+        let dy = mouseY - y;
+
+        let mag = Math.sqrt(dx * dx + dy * dy);
+
+        let norm_dx = dx / mag;
+        let norm_dy = dy / mag;
+
+        setPupilX(x + pupilRadius * norm_dx / 2);
+        setPupilY(y + pupilRadius * norm_dy / 2);
+    }
+
+    useEffect(() => {
+        function onMouseMove(e: MouseEvent) {
+            updatePupilPosition(e.clientX, e.clientY);
+        }
+
+        window.addEventListener('mousemove', onMouseMove);
+
+        return () => window.removeEventListener('mousemove', onMouseMove);
+    }, [x, y]);
+
+    useEffect(() => {
+        function onTouchMove(e: TouchEvent) {
+            if (e.targetTouches.length !== 0)
+                return;
+
+            updatePupilPosition(e.targetTouches[0].clientX, e.targetTouches[0].clientY);
+        }
+
+        window.addEventListener('touchmove', onTouchMove);
+
+        return () => window.removeEventListener('touchmove', onTouchMove);
+    }, [x, y]);
 
     return (<>
             <div className="creature-eye creature-eye"
@@ -29,8 +69,8 @@ function CreatureEye({x = 0, y = 0, radius = 0}: CreatureEyeProps) {
             ></div>
             <div className="creature-eye creature-eye-pupil"
                 style={{
-                    left: x - pupilRadius,
-                    top: y - pupilRadius,
+                    left: dragging ? x - pupilRadius : pupilX - pupilRadius,
+                    top: dragging ? y - pupilRadius : pupilY - pupilRadius,
                     width: pupilRadius * 2,
                     height: pupilRadius * 2,
                 }}
@@ -76,14 +116,13 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
         }
     }, [boneCount]);
 
-    const updateCreaturePositions = (prevPos: any, x: number, y: number) => {
+    function updateCreaturePositions(prevPos: any, x: number, y: number) {
         let dx = x - prevPos.x;
         let dy = y - prevPos.y;
 
         let mag = Math.sqrt(dx * dx + dy * dy);
 
-        if (mag > 2) {
-            console.log(mag);
+        if (mag > 3) {
             let theta = Math.atan2(dy, dx);
             setDirTheta(theta);
         }
@@ -111,7 +150,7 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
     useEffect(() => {
         let previousPos = { x: headX, y: headY }
 
-        const onMouseMove = (e: MouseEvent) => {
+        function onMouseMove(e: MouseEvent) {
             if (!dragging)
                 return;
             updateCreaturePositions(previousPos, e.clientX, e.clientY);
@@ -126,7 +165,7 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
     useEffect(() => {
         let previousPos = { x: headX, y: headY }
 
-        const onTouchMove = (e: TouchEvent) => {
+        function onTouchMove(e: TouchEvent) {
             if (!dragging || e.targetTouches.length > 1)
                 return;
 
@@ -176,12 +215,14 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
              <CreatureEye 
                 x={headX + (headRadius - eyeRadius / 2) * Math.cos(dirTheta - degToRad(90))} 
                 y={headY + (headRadius - eyeRadius / 2) * Math.sin(dirTheta - degToRad(90))} 
-                radius={eyeRadius}>
+                radius={eyeRadius}
+                dragging={dragging}>
             </CreatureEye>
              <CreatureEye 
                 x={headX + (headRadius - eyeRadius / 2) * Math.cos(dirTheta + degToRad(90))} 
                 y={headY + (headRadius - eyeRadius / 2) * Math.sin(dirTheta + degToRad(90))} 
-                radius={eyeRadius}>
+                radius={eyeRadius}
+                dragging={dragging}>
             </CreatureEye>
 
             {nodes.map((node, index) => <ArmatureNode key={index}
