@@ -187,6 +187,18 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
                      top: headY - boneRadius,
                      display: showBones ? "block" : "none",
                  }}
+                 onMouseDown={() => {
+                     setDragging(true);
+                 }}
+                 onMouseUp={() => {
+                     setDragging(false);
+                 }}
+                 onTouchStart={() => {
+                     setDragging(true);
+                 }}
+                 onTouchEnd={() => {
+                     setDragging(false);
+                 }}
                  >
              </div>
             <div className="body-node body-head"
