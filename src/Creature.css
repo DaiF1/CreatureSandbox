@@ -1,0 +1,14 @@
+.armature-node {
+    position: absolute;
+
+    background-color: transparent;
+    border: 5px solid #ffffff;
+    border-radius: 100%;
+
+    width: 10pt;
+    height: 10pt;
+}
+
+.armature-head {
+    border-color: red;
+}
