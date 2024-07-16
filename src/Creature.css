@@ -5,10 +5,19 @@
     border: 5px solid #ffffff;
     border-radius: 100%;
 
-    width: 10pt;
-    height: 10pt;
+    width: 14px;
+    height: 14px;
+
+    z-index: 5;
 }
 
 .armature-head {
     border-color: red;
+}
+
+.body-node {
+    position: absolute;
+
+    background-color: white;
+    border-radius: 100%;
 }
