@@ -1,9 +1,26 @@
 :root {
     background-color: #242424;
     color: white;
+
     overflow: hidden;
+}
+
+@font-face {
+    font-family: TimKid;
+    src: url("/TimKid.ttf");
+}
+
+@font-face {
+    font-family: Saeada;
+    src: url("/LTSaeada-Light.otf");
 }
 
 body {
     margin: 0;
+    font-family: Saeada;
+    letter-spacing: 1px;
+}
+
+h1, h2 {
+    font-family: TimKid;
 }

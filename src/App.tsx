@@ -2,7 +2,7 @@ import {useState} from 'react';
 import './App.css'
 import {Creature} from './Creature'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faPlus, faMinus} from '@fortawesome/free-solid-svg-icons';
+import {faPlus, faMinus, faArrowRight, faBars} from '@fortawesome/free-solid-svg-icons';
 
 function App() {
     const [boneCount, setBoneCount] = useState<number>(1);
@@ -10,16 +10,23 @@ function App() {
     const [creatureColor, setCreatureColor] = useState("#B8DE2F");
     const [eyeRadius, setEyeRadius] = useState<number>(15);
 
+    const [showConfig, setShowConfig] = useState<boolean>(window.innerWidth > 800);
+
     return (
         <div id="main-app">
             <header>
-                <h2 id="helper-text">Drag the head to move the creature</h2>
+                <h1 id="helper-text">Drag the head to move the creature</h1>
             </header>
 
             <Creature boneCount={boneCount} showBones={showBones} color={creatureColor} eyeRadius={eyeRadius}></Creature>
 
-            <div id="config-panel">
-                <h3>Control Panel</h3>
+            <button id="config-toggle" onClick={() => setShowConfig(!showConfig)}>
+                {showConfig ? <FontAwesomeIcon icon={faArrowRight} /> : <FontAwesomeIcon icon={faBars} /> }
+            </button>
+            <div id="config-panel" style={{
+                marginRight: showConfig ? 0 : "calc(-20vw - 20pt)", // 20vw of width and 10pt of padding
+            }}>
+                <h2>Creature Parameters</h2>
 
                 <label htmlFor="show-bones-input">Display bones: </label>
                 <input id="show-bones-input" type="checkbox" checked={showBones} onChange={e => {
@@ -27,9 +34,11 @@ function App() {
                 }}></input>
 
                 <p>Creature color</p>
-                <input id="creature-color-input" type="color" value={creatureColor} onChange={e => {
-                    setCreatureColor(e.target.value);
-                }}></input>
+                <div className="config-option">
+                    <input id="creature-color-input" type="color" value={creatureColor} onChange={e => {
+                        setCreatureColor(e.target.value);
+                    }}></input>
+                </div>
 
                 <p>Bone Count</p>
                 <div className="config-option">
