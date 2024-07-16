@@ -1,13 +1,22 @@
+#main-app {
+    display: flex;
+    height: 100vh;
+
+    user-select: none;
+}
+
+header {
+    flex: 1 1 auto;
+    text-align: center;
+}
+
 #config-panel {
     color: white;
     background-color: rgba(0,0,0,0.5);
     padding: 10pt;
 
-    position: absolute;
-    right: 0;
-
     width: 20vw;
-    height: 100vh;
+    height: 100%;
 }
 
 .config-option {
