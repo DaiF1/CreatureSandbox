@@ -10,7 +10,9 @@ function App() {
     const [creatureColor, setCreatureColor] = useState("#B8DE2F");
     const [eyeRadius, setEyeRadius] = useState<number>(15);
 
-    const [showConfig, setShowConfig] = useState<boolean>(window.innerWidth > 800);
+    const mobileRatio = window.innerWidth > 900;
+
+    const [showConfig, setShowConfig] = useState<boolean>(mobileRatio);
 
     return (
         <div id="main-app">
@@ -20,12 +22,14 @@ function App() {
 
             <Creature boneCount={boneCount} showBones={showBones} color={creatureColor} eyeRadius={eyeRadius}></Creature>
 
-            <button id="config-toggle" onClick={() => setShowConfig(!showConfig)}>
-                {showConfig ? <FontAwesomeIcon icon={faArrowRight} /> : <FontAwesomeIcon icon={faBars} /> }
-            </button>
-            <div id="config-panel" style={{
-                marginRight: showConfig ? 0 : "calc(-20vw - 20pt)", // 20vw of width and 10pt of padding
-            }}>
+            <div id="config-panel" style={
+                mobileRatio ? 
+                { marginRight: showConfig ? 0 : "calc(min(-20vw, -200pt) - 20pt)", /* 20vw of width and 10pt of padding */ }
+                : { right: showConfig ? 0 : "calc(min(-20vw, -200pt) - 20pt)" }
+            }>
+                <button id="config-toggle" onClick={() => setShowConfig(!showConfig)}>
+                    {showConfig ? <FontAwesomeIcon icon={faArrowRight} /> : <FontAwesomeIcon icon={faBars} /> }
+                </button>
                 <h2>Creature Parameters</h2>
 
                 <label htmlFor="show-bones-input">Display bones: </label>
