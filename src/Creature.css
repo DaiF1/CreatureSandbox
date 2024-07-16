@@ -21,3 +21,17 @@
     background-color: white;
     border-radius: 100%;
 }
+
+.creature-eye {
+    position: absolute;
+
+    background-color: white;
+    border-radius: 100%;
+
+    z-index: 8;
+}
+
+.creature-eye-pupil {
+    background-color: black;
+    z-index: 9;
+}

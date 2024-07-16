@@ -3,19 +3,56 @@ import {boneRadius, boneOffset, NodeProps, ArmatureNode} from "./ArmatureNode"
 
 import './Creature.css'
 
+function degToRad(d: number) {
+    return d * Math.PI / 180;
+}
+
 const defaultBodyRadius = 20;
+
+interface CreatureEyeProps {
+    x: number,
+    y: number,
+    radius: number,
+};
+
+function CreatureEye({x = 0, y = 0, radius = 0}: CreatureEyeProps) {
+    const pupilRadius = radius * 0.7;
+
+    return (<>
+            <div className="creature-eye creature-eye"
+                style={{
+                    left: x - radius,
+                    top: y - radius,
+                    width: radius * 2,
+                    height: radius * 2,
+                }}
+            ></div>
+            <div className="creature-eye creature-eye-pupil"
+                style={{
+                    left: x - pupilRadius,
+                    top: y - pupilRadius,
+                    width: pupilRadius * 2,
+                    height: pupilRadius * 2,
+                }}
+            ></div>
+        </>
+    )
+}
 
 interface CreatureProps {
     boneCount: number,
     showBones: boolean,
     color: string,
+    eyeRadius: number,
 }
 
-export function Creature({boneCount = 0, showBones = false, color = ""}: CreatureProps) {
+export function Creature({boneCount = 0, showBones = false, color = "", eyeRadius}: CreatureProps) {
     const [headX, setHeadX] = useState<number>(window.innerWidth / 2 -
                                                window.innerWidth * 0.1); // Config panel offset
     const [headY, setHeadY] = useState<number>(window.innerHeight / 2);
     const headRadius = 30; // Change that to a useState when adding size controls
+
+    const [dirTheta, setDirTheta] = useState<number>(0); // Creature direction in polar coordinates. Angle in radians
 
     const [dragging, setDragging] = useState<boolean>(false);
 
@@ -39,7 +76,18 @@ export function Creature({boneCount = 0, showBones = false, color = ""}: Creatur
         }
     }, [boneCount]);
 
-    const updateCreaturePositions = (x: number, y: number) => {
+    const updateCreaturePositions = (prevPos: any, x: number, y: number) => {
+        let dx = x - prevPos.x;
+        let dy = y - prevPos.y;
+
+        let mag = Math.sqrt(dx * dx + dy * dy);
+
+        if (mag > 2) {
+            console.log(mag);
+            let theta = Math.atan2(dy, dx);
+            setDirTheta(theta);
+        }
+
         setHeadX(x);
         setHeadY(y);
 
@@ -61,11 +109,13 @@ export function Creature({boneCount = 0, showBones = false, color = ""}: Creatur
     }
 
     useEffect(() => {
+        let previousPos = { x: headX, y: headY }
+
         const onMouseMove = (e: MouseEvent) => {
             if (!dragging)
                 return;
-
-            updateCreaturePositions(e.clientX, e.clientY);
+            updateCreaturePositions(previousPos, e.clientX, e.clientY);
+            previousPos = { x: e.clientX, y: e.clientY };
         }
 
         window.addEventListener('mousemove', onMouseMove);
@@ -74,11 +124,14 @@ export function Creature({boneCount = 0, showBones = false, color = ""}: Creatur
     }, [dragging])
 
     useEffect(() => {
+        let previousPos = { x: headX, y: headY }
+
         const onTouchMove = (e: TouchEvent) => {
             if (!dragging || e.targetTouches.length > 1)
                 return;
 
-            updateCreaturePositions(e.targetTouches[0].clientX, e.targetTouches[0].clientY);
+            updateCreaturePositions(previousPos, e.targetTouches[0].clientX, e.targetTouches[0].clientY);
+            previousPos = { x: e.targetTouches[0].clientX, y: e.targetTouches[0].clientY };
         }
 
         window.addEventListener('touchmove', onTouchMove);
@@ -119,6 +172,18 @@ export function Creature({boneCount = 0, showBones = false, color = ""}: Creatur
                  }}
                  >
              </div>
+
+             <CreatureEye 
+                x={headX + (headRadius - eyeRadius / 2) * Math.cos(dirTheta - degToRad(90))} 
+                y={headY + (headRadius - eyeRadius / 2) * Math.sin(dirTheta - degToRad(90))} 
+                radius={eyeRadius}>
+            </CreatureEye>
+             <CreatureEye 
+                x={headX + (headRadius - eyeRadius / 2) * Math.cos(dirTheta + degToRad(90))} 
+                y={headY + (headRadius - eyeRadius / 2) * Math.sin(dirTheta + degToRad(90))} 
+                radius={eyeRadius}>
+            </CreatureEye>
+
             {nodes.map((node, index) => <ArmatureNode key={index}
                        x={node.x}
                        y={node.y}
