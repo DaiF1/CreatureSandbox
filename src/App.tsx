@@ -46,23 +46,23 @@ function App() {
 
                 <p>Bone Count</p>
                 <div className="config-option">
-                    <button onClick={() => setBoneCount(boneCount + 1)}>
-                        <FontAwesomeIcon icon={faPlus} />
-                    </button>
-                    <p>{boneCount}</p>
                     <button onClick={() => { if (boneCount > 1) setBoneCount(boneCount - 1)}}>
                         <FontAwesomeIcon icon={faMinus} />
+                    </button>
+                    <p>{boneCount}</p>
+                    <button onClick={() => setBoneCount(boneCount + 1)}>
+                        <FontAwesomeIcon icon={faPlus} />
                     </button>
                 </div>
 
                 <p>Eye Radius</p>
                 <div className="config-option">
-                    <button onClick={() => setEyeRadius(eyeRadius + 1)}>
-                        <FontAwesomeIcon icon={faPlus} />
-                    </button>
-                    <p>{eyeRadius}</p>
                     <button onClick={() => { if (eyeRadius > 1) setEyeRadius(eyeRadius - 1)}}>
                         <FontAwesomeIcon icon={faMinus} />
+                    </button>
+                    <p>{eyeRadius}</p>
+                    <button onClick={() => setEyeRadius(eyeRadius + 1)}>
+                        <FontAwesomeIcon icon={faPlus} />
                     </button>
                 </div>
             </div>

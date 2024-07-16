@@ -43,7 +43,7 @@ function CreatureEye({x = 0, y = 0, radius = 0, dragging = false}: CreatureEyePr
         window.addEventListener('mousemove', onMouseMove);
 
         return () => window.removeEventListener('mousemove', onMouseMove);
-    }, [x, y]);
+    }, [x, y, radius]);
 
     useEffect(() => {
         function onTouchMove(e: TouchEvent) {
@@ -56,7 +56,7 @@ function CreatureEye({x = 0, y = 0, radius = 0, dragging = false}: CreatureEyePr
         window.addEventListener('touchmove', onTouchMove);
 
         return () => window.removeEventListener('touchmove', onTouchMove);
-    }, [x, y]);
+    }, [x, y, radius]);
 
     return (<>
             <div className="creature-eye creature-eye"
