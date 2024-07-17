@@ -26,6 +26,10 @@
     border-radius: 100%;
 }
 
+.body-head {
+    z-index: 2;
+}
+
 .creature-eye {
     position: absolute;
 

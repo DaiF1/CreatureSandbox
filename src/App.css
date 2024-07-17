@@ -60,6 +60,44 @@ header {
     margin-top: 2em;
 }
 
+input[type=number] {
+    background-color: transparent;
+    color: white;
+    border: none;
+    border-radius: 5px;
+
+    min-width: 0;
+    margin: 0 10pt;
+    padding: auto;
+
+    font-family: Saeada;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+input[type=number]:focus {
+    outline: 2px solid white;
+}
+
+#body-input {
+    padding: 3pt;
+
+    max-width: 20pt;
+}
+
+/* Remove arrows from number inputs */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number]{
+    -moz-appearance: textfield;
+}
+
+/* Responsive */
+
 @media screen and (max-width: 900px) {
     #config-panel {
         position: absolute;

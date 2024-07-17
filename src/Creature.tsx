@@ -3,6 +3,7 @@ import {boneRadius, boneOffset, NodeProps, ArmatureNode} from "./ArmatureNode"
 import {degToRad} from "./utils";
 
 import './Creature.css'
+import {NodeUpdater} from "./App";
 
 const defaultBodyRadius = 20;
 
@@ -81,14 +82,23 @@ interface CreatureProps {
     showBones: boolean,
     color: string,
     eyeRadius: number,
+
     editMode: boolean,
+    onSelect: (updater: NodeUpdater) => void,
 }
 
-export function Creature({boneCount = 0, showBones = false, color = "", eyeRadius = 0, editMode = false}: CreatureProps) {
-    const [headX, setHeadX] = useState<number>(window.innerWidth / 2 -
-                                               window.innerWidth * 0.1); // Config panel offset
-    const [headY, setHeadY] = useState<number>(window.innerHeight / 2);
-    const headRadius = 30; // Change that to a useState when adding size controls
+export function Creature({boneCount = 0,
+                         showBones = false,
+                         color = "",
+                         eyeRadius = 0,
+                         editMode = false,
+                         onSelect = () => {}}: CreatureProps) {
+
+    const [head, setHead] = useState<NodeProps>({
+        x: window.innerWidth / 2 - window.innerWidth * 0.1, // Config panel offset
+        y: window.innerHeight / 2,
+        radius: 30,
+    });
 
     const [dirTheta, setDirTheta] = useState<number>(0); // Creature direction in polar coordinates. Angle in radians
 
@@ -97,10 +107,14 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
     const [nodes, setNodes] = useState<NodeProps[]>([]);
 
     const [selectedNode, setSelectedNode] = useState<number>(-1);
+    useEffect(() => {
+        onSelect({node: head,
+                 updateRadius: (width: number) => { head.radius = width }});
+    }, []);
 
     useEffect(() => {
         if (boneCount - 1 > nodes.length) { // Bone count includes the head. Nodes does not
-            let lastNode = { x: headX, y: headY };
+            let lastNode = head;
             if (nodes.length != 0)
                 lastNode = nodes[nodes.length - 1];
 
@@ -133,8 +147,8 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
             setDirTheta(theta);
         }
 
-        setHeadX(x);
-        setHeadY(y);
+        head.x = x;
+        head.y = y;
 
         let prev = { x: x, y: y };
         for (let node of nodes) {
@@ -154,7 +168,7 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
     }
 
     useEffect(() => {
-        let previousPos = { x: headX, y: headY }
+        let previousPos = { x: head.x, y: head.y };
 
         function onMouseMove(e: MouseEvent) {
             if (!dragging)
@@ -169,7 +183,7 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
     }, [dragging])
 
     useEffect(() => {
-        let previousPos = { x: headX, y: headY }
+        let previousPos = { x: head.x, y: head.y }
 
         function onTouchMove(e: TouchEvent) {
             if (!dragging || e.targetTouches.length > 1)
@@ -191,12 +205,16 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
                 "armature-node armature-edit" + (selectedNode === -1 ? " armature-selected" : "") :
                 "armature-node"}
                  style={{
-                     left: headX - boneRadius,
-                     top: headY - boneRadius,
+                     left: head.x - boneRadius,
+                     top: head.y - boneRadius,
                      display: showBones || editMode ? "block" : "none",
                  }}
                  onMouseDown={() => {
-                     if (editMode) setSelectedNode(-1);
+                     if (editMode) {
+                         setSelectedNode(-1);
+                         onSelect({node: head,
+                                  updateRadius: (width) => { console.log(width); setHead({ ...head, radius: width }) }});
+                     }
                      else setDragging(true);
                  }}
                  onMouseUp={() => {
@@ -204,7 +222,11 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
                      setDragging(false);
                  }}
                  onTouchStart={() => {
-                     if (editMode) setSelectedNode(-1);
+                     if (editMode) {
+                         setSelectedNode(-1);
+                         onSelect({node: head,
+                                  updateRadius: (width) => { setHead({ ...head, radius: width }) }});
+                     }
                      else setDragging(true);
                  }}
                  onTouchEnd={() => {
@@ -213,12 +235,12 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
                  }}
                  >
              </div>
-            <div className="body-node"
+            <div className="body-node body-head"
                  style={{
-                         left: headX - headRadius,
-                         top: headY - headRadius,
-                         width: headRadius * 2,
-                         height: headRadius * 2,
+                         left: head.x - head.radius,
+                         top: head.y - head.radius,
+                         width: head.radius * 2,
+                         height: head.radius * 2,
                          backgroundColor: showBones ? color + "a0" : color,
                      }}
                  onMouseDown={() => {
@@ -241,14 +263,14 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
              </div>
 
              <CreatureEye 
-                x={headX + (headRadius - eyeRadius / 2) * Math.cos(dirTheta - degToRad(90))} 
-                y={headY + (headRadius - eyeRadius / 2) * Math.sin(dirTheta - degToRad(90))} 
+                x={head.x + (head.radius - eyeRadius / 2) * Math.cos(dirTheta - degToRad(90))} 
+                y={head.y + (head.radius - eyeRadius / 2) * Math.sin(dirTheta - degToRad(90))} 
                 radius={eyeRadius}
                 dragging={dragging}>
             </CreatureEye>
              <CreatureEye 
-                x={headX + (headRadius - eyeRadius / 2) * Math.cos(dirTheta + degToRad(90))} 
-                y={headY + (headRadius - eyeRadius / 2) * Math.sin(dirTheta + degToRad(90))} 
+                x={head.x + (head.radius - eyeRadius / 2) * Math.cos(dirTheta + degToRad(90))} 
+                y={head.y + (head.radius - eyeRadius / 2) * Math.sin(dirTheta + degToRad(90))} 
                 radius={eyeRadius}
                 dragging={dragging}>
             </CreatureEye>
@@ -260,7 +282,11 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
                        radius={node.radius}
                        showBones={showBones}
                        selected={selectedNode === index}
-                       onSelect={() => setSelectedNode(index)}
+                       onSelect={() => {
+                           setSelectedNode(index)
+                           onSelect({node: node,
+                                    updateRadius: (width) => { node.radius = width }});
+                       }}
                        editMode={editMode}
                        >
                    </ArmatureNode>)

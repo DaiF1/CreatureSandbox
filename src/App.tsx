@@ -3,13 +3,21 @@ import './App.css'
 import {Creature} from './Creature'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPlus, faMinus, faArrowRight, faBars} from '@fortawesome/free-solid-svg-icons';
+import {NodeProps} from './ArmatureNode';
+
+export interface NodeUpdater {
+    node: NodeProps,
+    updateRadius: (radius: number) => void,
+}
 
 function App() {
     const [boneCount, setBoneCount] = useState<number>(5);
     const [showBones, setShowBones] = useState<boolean>(false);
-    const [creatureColor, setCreatureColor] = useState("#B8DE2F");
+    const [creatureColor, setCreatureColor] = useState<string>("#B8DE2F");
     const [eyeRadius, setEyeRadius] = useState<number>(15);
+
     const [editMode, setEditMode] = useState<boolean>(false);
+    const [updater, setUpdater] = useState<NodeUpdater>({node: {x: 0, y: 0, radius: 0}, updateRadius: () => {}})
 
     const mobileRatio = window.innerWidth > 900;
 
@@ -21,7 +29,13 @@ function App() {
                 <h1 id="helper-text">Drag the head to move the creature</h1>
             </header>
 
-            <Creature boneCount={boneCount} showBones={showBones || editMode} color={creatureColor} eyeRadius={eyeRadius} editMode={editMode}></Creature>
+            <Creature boneCount={boneCount}
+                showBones={showBones || editMode}
+                color={creatureColor}
+                eyeRadius={eyeRadius}
+                editMode={editMode}
+                onSelect={(updater) => { setUpdater(updater) }}>
+            </Creature>
 
             <div id="config-panel" style={
                 mobileRatio ? 
@@ -70,6 +84,34 @@ function App() {
                 <div className="config-option">
                     <button id="edit-button" onClick={() => setEditMode(!editMode)}>{editMode ? "Stop editing" : "Edit the bones"}</button>
                 </div>
+
+                {
+                    editMode ? 
+                    <>
+                    <h2>Bone Parameters</h2>
+                    <p>Body width</p>
+                    <div className="config-option">
+                        <input id="body-input"
+                            type="number"
+                            value={updater.node.radius}
+                            onChange={e => {
+                                updater.updateRadius(Number(e.target.value));
+                                setUpdater({ ...updater, node: { ...updater.node, radius: Number(e.target.value) } });
+                        }}></input>
+                        <input id="body-slider"
+                            type="range"
+                            min={10}
+                            max={200}
+                            value={updater.node.radius}
+                            onChange={(e) => {
+                                updater.updateRadius(Number(e.target.value));
+                                setUpdater({ ...updater, node: { ...updater.node, radius: Number(e.target.value) } });
+                            }}>
+                        </input>
+                    </div>
+                    </>
+                    : null
+                }
             </div>
         </div>
     )
