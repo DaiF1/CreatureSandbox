@@ -5,7 +5,7 @@ import {degToRad} from "./utils";
 import './Creature.css'
 import {NodeUpdater} from "./App";
 
-const defaultBodyRadius = 20;
+const defaultBodyRadius = 15;
 
 interface CreatureEyeProps {
     x: number,
@@ -104,7 +104,12 @@ export function Creature({boneCount = 0,
 
     const [dragging, setDragging] = useState<boolean>(false);
 
-    const [nodes, setNodes] = useState<NodeProps[]>([]);
+    const [nodes, setNodes] = useState<NodeProps[]>([
+        {x: head.x - boneOffset    , y: head.y, radius: 38},
+        {x: head.x - boneOffset * 2, y: head.y, radius: 31},
+        {x: head.x - boneOffset * 3, y: head.y, radius: 21},
+        {x: head.x - boneOffset * 4, y: head.y, radius: 15},
+    ]);
 
     const [selectedNode, setSelectedNode] = useState<number>(-1);
     useEffect(() => {
