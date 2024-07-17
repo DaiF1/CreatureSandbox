@@ -22,7 +22,7 @@ function App() {
     const mobileRatio = window.innerWidth > 900;
     const configIcon = mobileRatio ? faArrowRight : faArrowDown;
 
-    const [showConfig, setShowConfig] = useState<boolean>(mobileRatio);
+    const [showConfig, setShowConfig] = useState<boolean>(true);
 
     return (
         <div id="main-app">

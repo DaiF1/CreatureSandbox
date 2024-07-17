@@ -96,7 +96,8 @@ export function Creature({boneCount = 0,
                          onSelect = () => {}}: CreatureProps) {
 
     const [head, setHead] = useState<NodeProps>({
-        x: window.innerWidth / 2 - window.innerWidth * 0.1, // Config panel offset
+        x: window.innerWidth / 2 - window.innerWidth * 0.1 /* Config panel offset */ +
+            boneOffset * 2,
         y: window.innerHeight / 2,
         radius: 30,
     });
