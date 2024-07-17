@@ -5,7 +5,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPlus, faMinus, faArrowRight, faBars} from '@fortawesome/free-solid-svg-icons';
 
 function App() {
-    const [boneCount, setBoneCount] = useState<number>(1);
+    const [boneCount, setBoneCount] = useState<number>(5);
     const [showBones, setShowBones] = useState<boolean>(false);
     const [creatureColor, setCreatureColor] = useState("#B8DE2F");
     const [eyeRadius, setEyeRadius] = useState<number>(15);

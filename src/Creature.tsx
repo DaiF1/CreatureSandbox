@@ -99,16 +99,22 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
     const [nodes, setNodes] = useState<NodeProps[]>([]);
 
     useEffect(() => {
-        if (boneCount - 1 > nodes.length) {
+        if (boneCount - 1 > nodes.length) { // Bone count includes the head. Nodes does not
             let lastNode = { x: headX, y: headY };
             if (nodes.length != 0)
                 lastNode = nodes[nodes.length - 1];
 
-            setNodes([...nodes, {
-                x: lastNode.x - boneOffset,
-                y: lastNode.y,
-                radius: defaultBodyRadius,
-            }]);
+            let newNodes = []
+            let count = boneCount - nodes.length;
+            for (let i = 1; i < count; i++) {
+                newNodes.push({
+                    x: lastNode.x - boneOffset * i,
+                    y: lastNode.y,
+                    radius: defaultBodyRadius,
+                });
+            }
+
+            setNodes([...nodes, ...newNodes]);
         }
         else {
             let newNodes = nodes.slice(0, boneCount - 1);
