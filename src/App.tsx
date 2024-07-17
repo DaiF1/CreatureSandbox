@@ -9,6 +9,7 @@ function App() {
     const [showBones, setShowBones] = useState<boolean>(false);
     const [creatureColor, setCreatureColor] = useState("#B8DE2F");
     const [eyeRadius, setEyeRadius] = useState<number>(15);
+    const [editMode, setEditMode] = useState<boolean>(false);
 
     const mobileRatio = window.innerWidth > 900;
 
@@ -20,7 +21,7 @@ function App() {
                 <h1 id="helper-text">Drag the head to move the creature</h1>
             </header>
 
-            <Creature boneCount={boneCount} showBones={showBones} color={creatureColor} eyeRadius={eyeRadius}></Creature>
+            <Creature boneCount={boneCount} showBones={showBones} color={creatureColor} eyeRadius={eyeRadius} editMode={editMode}></Creature>
 
             <div id="config-panel" style={
                 mobileRatio ? 
@@ -64,6 +65,10 @@ function App() {
                     <button onClick={() => setEyeRadius(eyeRadius + 1)}>
                         <FontAwesomeIcon icon={faPlus} />
                     </button>
+                </div>
+
+                <div className="config-option">
+                    <button id="edit-button" onClick={() => setEditMode(!editMode)}>{editMode ? "Stop editing" : "Edit the bones"}</button>
                 </div>
             </div>
         </div>

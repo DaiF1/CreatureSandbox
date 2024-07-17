@@ -56,6 +56,10 @@ header {
     flex: 1 1 auto;
 }
 
+#edit-button {
+    margin-top: 2em;
+}
+
 @media screen and (max-width: 900px) {
     #config-panel {
         position: absolute;

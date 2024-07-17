@@ -84,9 +84,10 @@ interface CreatureProps {
     showBones: boolean,
     color: string,
     eyeRadius: number,
+    editMode: boolean,
 }
 
-export function Creature({boneCount = 0, showBones = false, color = "", eyeRadius}: CreatureProps) {
+export function Creature({boneCount = 0, showBones = false, color = "", eyeRadius = 0, editMode = false}: CreatureProps) {
     const [headX, setHeadX] = useState<number>(window.innerWidth / 2 -
                                                window.innerWidth * 0.1); // Config panel offset
     const [headY, setHeadY] = useState<number>(window.innerHeight / 2);
@@ -191,18 +192,22 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
                  style={{
                      left: headX - boneRadius,
                      top: headY - boneRadius,
-                     display: showBones ? "block" : "none",
+                     display: showBones || editMode ? "block" : "none",
                  }}
                  onMouseDown={() => {
+                     if (editMode) return;
                      setDragging(true);
                  }}
                  onMouseUp={() => {
+                     if (editMode) return;
                      setDragging(false);
                  }}
                  onTouchStart={() => {
+                     if (editMode) return;
                      setDragging(true);
                  }}
                  onTouchEnd={() => {
+                     if (editMode) return;
                      setDragging(false);
                  }}
                  >
@@ -216,15 +221,19 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
                          backgroundColor: color,
                      }}
                  onMouseDown={() => {
+                     if (editMode) return;
                      setDragging(true);
                  }}
                  onMouseUp={() => {
+                     if (editMode) return;
                      setDragging(false);
                  }}
                  onTouchStart={() => {
+                     if (editMode) return;
                      setDragging(true);
                  }}
                  onTouchEnd={() => {
+                     if (editMode) return;
                      setDragging(false);
                  }}
                  >
@@ -248,7 +257,7 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
                        y={node.y}
                        color={color}
                        radius={node.radius}
-                       showBones={showBones}>
+                       showBones={showBones || editMode}>
                    </ArmatureNode>)
             }
             </div>

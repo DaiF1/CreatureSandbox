@@ -24,6 +24,11 @@ body {
     letter-spacing: 1px;
 }
 
-h1, h2 {
+h1, h2, button {
     font-family: TimKid;
+}
+
+button {
+    padding: 8pt;
+    font-size: 1.2em;
 }
