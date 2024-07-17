@@ -6,6 +6,7 @@
 #root {
     position: relative;
     overflow: hidden;
+    height: 100%;
 }
 
 @font-face {
@@ -18,8 +19,14 @@
     src: url("/LTSaeada-Light.otf");
 }
 
+html, body {
+    height: 100%;
+    overscroll-behavior: none;
+}
+
 body {
     margin: 0;
+
     font-family: Saeada;
     letter-spacing: 1px;
 }
