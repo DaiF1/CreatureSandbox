@@ -8,7 +8,11 @@ import {NodeProps} from './ArmatureNode';
 export interface NodeUpdater {
     node: NodeProps,
     updateRadius: (radius: number) => void,
-}
+};
+
+export interface ResetMethods {
+    position: () => void,
+};
 
 function App() {
     const [boneCount, setBoneCount] = useState<number>(5);
@@ -18,6 +22,7 @@ function App() {
 
     const [editMode, setEditMode] = useState<boolean>(false);
     const [updater, setUpdater] = useState<NodeUpdater>({node: {x: 0, y: 0, radius: 0}, updateRadius: () => {}})
+    const [resetMethods, setResetMethods] = useState<ResetMethods>({position: () => {}})
 
     const mobileRatio = window.innerWidth > 900;
     const configIcon = mobileRatio ? faArrowRight : faArrowDown;
@@ -35,7 +40,8 @@ function App() {
                 color={creatureColor}
                 eyeRadius={eyeRadius}
                 editMode={editMode}
-                onSelect={(updater) => { setUpdater(updater) }}>
+                onSelect={(updater) => { setUpdater(updater) }}
+                defineReset={(reset) => setResetMethods(reset)}>
             </Creature>
 
             <div id="config-panel" style={
@@ -47,7 +53,12 @@ function App() {
                     {showConfig ? <FontAwesomeIcon icon={configIcon} /> : <FontAwesomeIcon icon={faBars} /> }
                 </button>
                 <div id="config-panel-content">
+
                 <h2>Creature Parameters</h2>
+
+                <div className="config-option">
+                <button id="reset-pos-button" onClick={() => resetMethods.position()}>Reset Position</button>
+                </div>
 
                 <label htmlFor="show-bones-input">Display bones: </label>
                 <input id="show-bones-input" type="checkbox" checked={showBones} onChange={e => {

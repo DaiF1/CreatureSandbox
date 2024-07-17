@@ -3,7 +3,7 @@ import {boneRadius, boneOffset, NodeProps, ArmatureNode} from "./ArmatureNode"
 import {degToRad} from "./utils";
 
 import './Creature.css'
-import {NodeUpdater} from "./App";
+import {NodeUpdater, ResetMethods} from "./App";
 
 const defaultBodyRadius = 15;
 
@@ -86,6 +86,7 @@ interface CreatureProps {
 
     editMode: boolean,
     onSelect: (updater: NodeUpdater) => void,
+    defineReset: (reset: ResetMethods) => void,
 }
 
 export function Creature({boneCount = 0,
@@ -93,7 +94,8 @@ export function Creature({boneCount = 0,
                          color = "",
                          eyeRadius = 0,
                          editMode = false,
-                         onSelect = () => {}}: CreatureProps) {
+                         onSelect = () => {},
+                         defineReset = () => {}}: CreatureProps) {
 
     const [head, setHead] = useState<NodeProps>({
         x: window.innerWidth / 2 - window.innerWidth * 0.1 /* Config panel offset */ +
@@ -117,6 +119,12 @@ export function Creature({boneCount = 0,
     useEffect(() => {
         onSelect({node: head,
                  updateRadius: (width: number) => { head.radius = width }});
+
+        defineReset({
+            position: () => updateCreaturePositions(head,
+                                                    window.innerWidth / 2 - window.innerWidth * 0.1 + boneOffset * 2,
+                                                    window.innerHeight / 2),
+        });
     }, []);
 
     useEffect(() => {
@@ -220,7 +228,7 @@ export function Creature({boneCount = 0,
                      if (editMode) {
                          setSelectedNode(-1);
                          onSelect({node: head,
-                                  updateRadius: (width) => { console.log(width); setHead({ ...head, radius: width }) }});
+                                  updateRadius: (width) => { setHead({ ...head, radius: width }) }});
                      }
                      else setDragging(true);
                  }}
