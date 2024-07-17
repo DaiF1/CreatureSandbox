@@ -64,7 +64,11 @@ function App() {
                     <button onClick={() => { if (boneCount > 1) setBoneCount(boneCount - 1)}}>
                         <FontAwesomeIcon icon={faMinus} />
                     </button>
-                    <p>{boneCount}</p>
+                    <input type="number"
+                        value={boneCount}
+                        onChange={e => {
+                            setBoneCount(Number(e.target.value));
+                    }}></input>
                     <button onClick={() => setBoneCount(boneCount + 1)}>
                         <FontAwesomeIcon icon={faPlus} />
                     </button>
@@ -75,7 +79,11 @@ function App() {
                     <button onClick={() => { if (eyeRadius > 1) setEyeRadius(eyeRadius - 1)}}>
                         <FontAwesomeIcon icon={faMinus} />
                     </button>
-                    <p>{eyeRadius}</p>
+                    <input type="number"
+                        value={eyeRadius}
+                        onChange={e => {
+                            setEyeRadius(Number(e.target.value));
+                    }}></input>
                     <button onClick={() => setEyeRadius(eyeRadius + 1)}>
                         <FontAwesomeIcon icon={faPlus} />
                     </button>
