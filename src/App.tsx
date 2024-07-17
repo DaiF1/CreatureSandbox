@@ -2,7 +2,7 @@ import {useState} from 'react';
 import './App.css'
 import {Creature} from './Creature'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faPlus, faMinus, faArrowRight, faBars} from '@fortawesome/free-solid-svg-icons';
+import {faPlus, faMinus, faArrowRight, faBars, faArrowDown} from '@fortawesome/free-solid-svg-icons';
 import {NodeProps} from './ArmatureNode';
 
 export interface NodeUpdater {
@@ -20,6 +20,7 @@ function App() {
     const [updater, setUpdater] = useState<NodeUpdater>({node: {x: 0, y: 0, radius: 0}, updateRadius: () => {}})
 
     const mobileRatio = window.innerWidth > 900;
+    const configIcon = mobileRatio ? faArrowRight : faArrowDown;
 
     const [showConfig, setShowConfig] = useState<boolean>(mobileRatio);
 
@@ -40,11 +41,12 @@ function App() {
             <div id="config-panel" style={
                 mobileRatio ? 
                 { marginRight: showConfig ? 0 : "calc(min(-20vw, -200pt) - 20pt)", /* 20vw of width and 10pt of padding */ }
-                : { right: showConfig ? 0 : "calc(min(-20vw, -200pt) - 20pt)" }
+                : { top: showConfig ? "calc(60% + 20pt)" : "100%" }
             }>
                 <button id="config-toggle" onClick={() => setShowConfig(!showConfig)}>
-                    {showConfig ? <FontAwesomeIcon icon={faArrowRight} /> : <FontAwesomeIcon icon={faBars} /> }
+                    {showConfig ? <FontAwesomeIcon icon={configIcon} /> : <FontAwesomeIcon icon={faBars} /> }
                 </button>
+                <div id="config-panel-content">
                 <h2>Creature Parameters</h2>
 
                 <label htmlFor="show-bones-input">Display bones: </label>
@@ -120,6 +122,7 @@ function App() {
                     </>
                     : null
                 }
+            </div>
             </div>
         </div>
     )

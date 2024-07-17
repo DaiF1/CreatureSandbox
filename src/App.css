@@ -27,6 +27,10 @@ header {
     transition: margin-right 0.5s ease;
 }
 
+#config-panel-content {
+    width: 100%;
+}
+
 #config-toggle {
     position: absolute;
     top: 0;
@@ -101,12 +105,25 @@ input[type=number]{
 @media screen and (max-width: 900px) {
     #config-panel {
         position: absolute;
-        transition: right 0.5s ease;
 
         background-color: #121212;
+        width: calc(100% - 20pt); /* remove padding from size */
+        min-width: 0;
+
+        transition: top 0.5s ease;
+    }
+
+    #config-panel-content {
+        width: 100%;
+        height: calc(40% - 40pt);
+        overflow-x: scroll;
     }
 
     #config-toggle {
         background-color: #121212;
+        border-radius: 0 10pt 0 0;
+
+        left: 0;
+        top: -40pt;
     }
 }
