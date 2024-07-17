@@ -15,10 +15,10 @@ interface CreatureEyeProps {
 };
 
 function CreatureEye({x = 0, y = 0, radius = 0, dragging = false}: CreatureEyeProps) {
-    const [pupilX, setPupilX] = useState<number>(x);
-    const [pupilY, setPupilY] = useState<number>(y);
-
     const pupilRadius = radius * 0.7;
+
+    const [pupilX, setPupilX] = useState<number>(0);
+    const [pupilY, setPupilY] = useState<number>(0);
 
     function updatePupilPosition(mouseX: number, mouseY: number) {
         let dx = mouseX - x;
@@ -29,8 +29,8 @@ function CreatureEye({x = 0, y = 0, radius = 0, dragging = false}: CreatureEyePr
         let norm_dx = dx / mag;
         let norm_dy = dy / mag;
 
-        setPupilX(x + pupilRadius * norm_dx / 2);
-        setPupilY(y + pupilRadius * norm_dy / 2);
+        setPupilX(pupilRadius * norm_dx / 2);
+        setPupilY(pupilRadius * norm_dy / 2);
     }
 
     useEffect(() => {
@@ -64,15 +64,16 @@ function CreatureEye({x = 0, y = 0, radius = 0, dragging = false}: CreatureEyePr
                     width: radius * 2,
                     height: radius * 2,
                 }}
-            ></div>
+            >
             <div className="creature-eye creature-eye-pupil"
                 style={{
-                    left: dragging ? x - pupilRadius : pupilX - pupilRadius,
-                    top: dragging ? y - pupilRadius : pupilY - pupilRadius,
+                    left: dragging ? pupilRadius / 2 : pupilX + pupilRadius / 2,
+                    top: dragging ? pupilRadius / 2 : pupilY + pupilRadius / 2,
                     width: pupilRadius * 2,
                     height: pupilRadius * 2,
                 }}
             ></div>
+            </div>
         </>
     )
 }

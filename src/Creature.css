@@ -24,10 +24,11 @@
 
     background-color: white;
     border-radius: 100%;
+    z-index: -1;
 }
 
 .body-head {
-    z-index: 2;
+    z-index: 0;
 }
 
 .creature-eye {
@@ -37,7 +38,6 @@
     border-radius: 100%;
 
     pointer-events: none;
-    z-index: 3;
 }
 
 .creature-eye-pupil {
