@@ -12,13 +12,28 @@ export interface ArmatureNodeProps {
     y: number,
     radius: number,
     color: string,
+
     showBones: boolean,
+
+    selected: boolean,
+    onSelect: () => void,
+
+    editMode: boolean,
 }
 
-export function ArmatureNode({ x = 0, y = 0, radius = 0, color = "", showBones = false } : ArmatureNodeProps) {
+export function ArmatureNode({ x = 0,
+                             y = 0,
+                             radius = 0,
+                             color = "",
+                             showBones = false,
+                             selected = false,
+                             onSelect = () => {},
+                             editMode = false } : ArmatureNodeProps) {
     return (
         <>
-            <div className="armature-node"
+            <div className={editMode ?
+                "armature-node armature-edit" + (selected ? " armature-selected" : "") :
+                "armature-node"}
                 style={
                     {
                         left: x - boneRadius,
@@ -26,6 +41,12 @@ export function ArmatureNode({ x = 0, y = 0, radius = 0, color = "", showBones =
                         display: showBones ? "block" : "none",
                     }
                 }
+                 onMouseDown={() => {
+                     if (editMode) onSelect();
+                 }}
+                 onTouchStart={() => {
+                     if (editMode) onSelect();
+                 }}
             ></div>
             <div className="body-node"
                 style={

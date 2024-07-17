@@ -11,6 +11,14 @@
     z-index: 5;
 }
 
+.armature-edit:hover {
+    border-color: #ffaaaa;
+}
+
+.armature-selected, .armature-selected:hover {
+    border-color: red;
+}
+
 .body-node {
     position: absolute;
 

@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react"
 import {boneRadius, boneOffset, NodeProps, ArmatureNode} from "./ArmatureNode"
-import {darkenColor, degToRad} from "./utils";
+import {degToRad} from "./utils";
 
 import './Creature.css'
 
@@ -96,6 +96,8 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
 
     const [nodes, setNodes] = useState<NodeProps[]>([]);
 
+    const [selectedNode, setSelectedNode] = useState<number>(-1);
+
     useEffect(() => {
         if (boneCount - 1 > nodes.length) { // Bone count includes the head. Nodes does not
             let lastNode = { x: headX, y: headY };
@@ -185,23 +187,25 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
     return (
         <>
             <div id="armature" key={boneCount}>
-            <div className="armature-node"
+            <div className={editMode ?
+                "armature-node armature-edit" + (selectedNode === -1 ? " armature-selected" : "") :
+                "armature-node"}
                  style={{
                      left: headX - boneRadius,
                      top: headY - boneRadius,
                      display: showBones || editMode ? "block" : "none",
                  }}
                  onMouseDown={() => {
-                     if (editMode) return;
-                     setDragging(true);
+                     if (editMode) setSelectedNode(-1);
+                     else setDragging(true);
                  }}
                  onMouseUp={() => {
                      if (editMode) return;
                      setDragging(false);
                  }}
                  onTouchStart={() => {
-                     if (editMode) return;
-                     setDragging(true);
+                     if (editMode) setSelectedNode(-1);
+                     else setDragging(true);
                  }}
                  onTouchEnd={() => {
                      if (editMode) return;
@@ -254,7 +258,11 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
                        y={node.y}
                        color={color}
                        radius={node.radius}
-                       showBones={showBones}>
+                       showBones={showBones}
+                       selected={selectedNode === index}
+                       onSelect={() => setSelectedNode(index)}
+                       editMode={editMode}
+                       >
                    </ArmatureNode>)
             }
             </div>
