@@ -1,11 +1,8 @@
 import {useEffect, useState} from "react"
 import {boneRadius, boneOffset, NodeProps, ArmatureNode} from "./ArmatureNode"
+import {darkenColor, degToRad} from "./utils";
 
 import './Creature.css'
-
-function degToRad(d: number) {
-    return d * Math.PI / 180;
-}
 
 const defaultBodyRadius = 20;
 
@@ -188,7 +185,7 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
     return (
         <>
             <div id="armature" key={boneCount}>
-            <div className="armature-node armature-head"
+            <div className="armature-node"
                  style={{
                      left: headX - boneRadius,
                      top: headY - boneRadius,
@@ -212,13 +209,13 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
                  }}
                  >
              </div>
-            <div className="body-node body-head"
+            <div className="body-node"
                  style={{
                          left: headX - headRadius,
                          top: headY - headRadius,
                          width: headRadius * 2,
                          height: headRadius * 2,
-                         backgroundColor: color,
+                         backgroundColor: showBones ? color + "a0" : color,
                      }}
                  onMouseDown={() => {
                      if (editMode) return;
@@ -257,7 +254,7 @@ export function Creature({boneCount = 0, showBones = false, color = "", eyeRadiu
                        y={node.y}
                        color={color}
                        radius={node.radius}
-                       showBones={showBones || editMode}>
+                       showBones={showBones}>
                    </ArmatureNode>)
             }
             </div>

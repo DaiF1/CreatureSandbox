@@ -34,7 +34,7 @@ export function ArmatureNode({ x = 0, y = 0, radius = 0, color = "", showBones =
                         top: y - radius,
                         width: radius * 2,
                         height: radius * 2,
-                        backgroundColor: color,
+                        backgroundColor: showBones ? color + "a0" : color,
                     }
                 }
             ></div>

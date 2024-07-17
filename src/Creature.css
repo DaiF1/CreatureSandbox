@@ -11,10 +11,6 @@
     z-index: 5;
 }
 
-.armature-head {
-    border-color: red;
-}
-
 .body-node {
     position: absolute;
 

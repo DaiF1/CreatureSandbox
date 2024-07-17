@@ -21,7 +21,7 @@ function App() {
                 <h1 id="helper-text">Drag the head to move the creature</h1>
             </header>
 
-            <Creature boneCount={boneCount} showBones={showBones} color={creatureColor} eyeRadius={eyeRadius} editMode={editMode}></Creature>
+            <Creature boneCount={boneCount} showBones={showBones || editMode} color={creatureColor} eyeRadius={eyeRadius} editMode={editMode}></Creature>
 
             <div id="config-panel" style={
                 mobileRatio ? 
