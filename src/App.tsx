@@ -20,6 +20,9 @@ function App() {
     const [creatureColor, setCreatureColor] = useState<string>("#B8DE2F");
     const [eyeRadius, setEyeRadius] = useState<number>(15);
 
+    const [legLength, setLegLength] = useState<number>(35);
+    const [legWidth, setLegWidth] = useState<number>(15);
+
     const [editMode, setEditMode] = useState<boolean>(false);
     const [updater, setUpdater] = useState<NodeUpdater>({node: {x: 0, y: 0, radius: 0}, updateRadius: () => {}})
     const [resetMethods, setResetMethods] = useState<ResetMethods>({position: () => {}})
@@ -41,7 +44,10 @@ function App() {
                 eyeRadius={eyeRadius}
                 editMode={editMode}
                 onSelect={(updater) => { setUpdater(updater) }}
-                defineReset={(reset) => setResetMethods(reset)}>
+                defineReset={(reset) => setResetMethods(reset)}
+                legLength={legLength}
+                legWidth={legWidth}
+                >
             </Creature>
 
             <div id="config-panel" style={
@@ -102,6 +108,44 @@ function App() {
                     </button>
                 </div>
 
+                <p>Leg length</p>
+                <div className="config-option">
+                    <input className="config-slider-input"
+                        type="number"
+                        value={legLength}
+                        onChange={e => {
+                            setLegLength(Math.max(Number(e.target.value), legWidth * 2));
+                    }}></input>
+                    <input className="config-slider"
+                        type="range"
+                        min={legWidth * 2}
+                        max={200}
+                        value={legLength}
+                        onChange={(e) => {
+                            setLegLength(Number(e.target.value));
+                        }}>
+                    </input>
+                </div>
+
+                <p>Leg Width</p>
+                <div className="config-option">
+                    <input className="config-slider-input"
+                        type="number"
+                        value={legWidth}
+                        onChange={e => {
+                            setLegWidth(Math.max(Number(e.target.value), 1));
+                    }}></input>
+                    <input className="config-slider"
+                        type="range"
+                        min={1}
+                        max={30}
+                        value={legWidth}
+                        onChange={(e) => {
+                            setLegWidth(Number(e.target.value));
+                        }}>
+                    </input>
+                </div>
+
                 <div className="config-option">
                     <button id="edit-button" onClick={() => setEditMode(!editMode)}>{editMode ? "Stop editing" : "Edit the bones"}</button>
                 </div>
@@ -112,14 +156,14 @@ function App() {
                     <h2>Bone Parameters</h2>
                     <p>Body width</p>
                     <div className="config-option">
-                        <input id="body-input"
+                        <input className="config-slider-input"
                             type="number"
                             value={updater.node.radius}
                             onChange={e => {
                                 updater.updateRadius(Number(e.target.value));
                                 setUpdater({ ...updater, node: { ...updater.node, radius: Number(e.target.value) } });
                         }}></input>
-                        <input id="body-slider"
+                        <input className="config-slider"
                             type="range"
                             min={10}
                             max={200}

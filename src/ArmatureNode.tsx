@@ -1,3 +1,6 @@
+import {CreatureLeg} from "./CreatureLeg";
+import {degToRad} from "./utils";
+
 export const boneRadius = 12; // 7px radius + 5px border
 export const boneOffset = 30; // 30px
 
@@ -5,6 +8,9 @@ export interface NodeProps {
     x: number,
     y: number,
     radius: number,
+    dirX: number,
+    dirY: number,
+    hasLegs: boolean,
 };
 
 export interface ArmatureNodeProps {
@@ -12,6 +18,11 @@ export interface ArmatureNodeProps {
     y: number,
     radius: number,
     color: string,
+    hasLegs: boolean,
+    legWidth: number,
+    legLength: number,
+
+    dirTheta: number,
 
     showBones: boolean,
 
@@ -23,12 +34,16 @@ export interface ArmatureNodeProps {
 
 export function ArmatureNode({ x = 0,
                              y = 0,
+                             dirTheta = 0,
                              radius = 0,
                              color = "",
                              showBones = false,
                              selected = false,
                              onSelect = () => {},
-                             editMode = false } : ArmatureNodeProps) {
+                             editMode = false,
+                             legWidth = 15,
+                             legLength = 35,
+                             hasLegs = false } : ArmatureNodeProps) {
     return (
         <>
             <div className={editMode ?
@@ -59,6 +74,39 @@ export function ArmatureNode({ x = 0,
                     }
                 }
             ></div>
+            {
+            hasLegs ? 
+                <>
+            <CreatureLeg
+                attachPoint={{
+                    x: x + (radius - legWidth) * Math.cos(dirTheta - degToRad(90)),
+                    y: y + (radius - legWidth) * Math.sin(dirTheta - degToRad(90)),
+                }}
+                targetPoint={{
+                    x: x + (radius + legLength) * Math.cos(dirTheta - degToRad(130)),
+                    y: y + (radius + legLength) * Math.sin(dirTheta - degToRad(130)),
+                }}
+                width={legWidth}
+                length={legLength}
+                color={color}
+            ></CreatureLeg>
+
+            <CreatureLeg
+                attachPoint={{
+                    x: x + (radius - legWidth) * Math.cos(dirTheta + degToRad(90)),
+                    y: y + (radius - legWidth) * Math.sin(dirTheta + degToRad(90)),
+                }}
+                targetPoint={{
+                    x: x + (radius + legLength) * Math.cos(dirTheta + degToRad(130)),
+                    y: y + (radius + legLength) * Math.sin(dirTheta + degToRad(130)),
+                }}
+                width={legWidth}
+                length={legLength}
+                color={color}
+            ></CreatureLeg>
+            </>
+            : null
+            }
         </>
     )
 }

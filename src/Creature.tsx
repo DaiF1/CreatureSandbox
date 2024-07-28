@@ -83,6 +83,8 @@ interface CreatureProps {
     showBones: boolean,
     color: string,
     eyeRadius: number,
+    legLength: number,
+    legWidth: number,
 
     editMode: boolean,
     onSelect: (updater: NodeUpdater) => void,
@@ -93,6 +95,8 @@ export function Creature({boneCount = 0,
                          showBones = false,
                          color = "",
                          eyeRadius = 0,
+                         legLength = 35,
+                         legWidth = 15,
                          editMode = false,
                          onSelect = () => {},
                          defineReset = () => {}}: CreatureProps) {
@@ -102,6 +106,9 @@ export function Creature({boneCount = 0,
             boneOffset * 2,
         y: window.innerHeight / 2,
         radius: 30,
+        dirX: -1,
+        dirY: 0,
+        hasLegs: false,
     });
 
     const [dirTheta, setDirTheta] = useState<number>(0); // Creature direction in polar coordinates. Angle in radians
@@ -109,10 +116,10 @@ export function Creature({boneCount = 0,
     const [dragging, setDragging] = useState<boolean>(false);
 
     const [nodes, setNodes] = useState<NodeProps[]>([
-        {x: head.x - boneOffset    , y: head.y, radius: 38},
-        {x: head.x - boneOffset * 2, y: head.y, radius: 31},
-        {x: head.x - boneOffset * 3, y: head.y, radius: 21},
-        {x: head.x - boneOffset * 4, y: head.y, radius: 15},
+        {x: head.x - boneOffset    , y: head.y, radius: 38, dirX: -1, dirY: 0, hasLegs: true},
+        {x: head.x - boneOffset * 2, y: head.y, radius: 31, dirX: -1, dirY: 0, hasLegs: false},
+        {x: head.x - boneOffset * 3, y: head.y, radius: 21, dirX: -1, dirY: 0, hasLegs: true},
+        {x: head.x - boneOffset * 4, y: head.y, radius: 15, dirX: -1, dirY: 0, hasLegs: false},
     ]);
 
     const [selectedNode, setSelectedNode] = useState<number>(-1);
@@ -140,6 +147,9 @@ export function Creature({boneCount = 0,
                     x: lastNode.x - boneOffset * i,
                     y: lastNode.y,
                     radius: defaultBodyRadius,
+                    dirX: -1,
+                    dirY: 0,
+                    hasLegs: false,
                 });
             }
 
@@ -174,6 +184,9 @@ export function Creature({boneCount = 0,
 
             let norm_dx = dx / mag;
             let norm_dy = dy / mag;
+
+            node.dirX = norm_dx;
+            node.dirY = norm_dy;
 
             node.x = prev.x + norm_dx * boneOffset;
             node.y = prev.y + norm_dy * boneOffset;
@@ -293,6 +306,7 @@ export function Creature({boneCount = 0,
             {nodes.map((node, index) => <ArmatureNode key={index}
                        x={node.x}
                        y={node.y}
+                       dirTheta={Math.atan2(node.dirY, node.dirX)}
                        color={color}
                        radius={node.radius}
                        showBones={showBones}
@@ -303,6 +317,9 @@ export function Creature({boneCount = 0,
                                     updateRadius: (width) => { node.radius = width }});
                        }}
                        editMode={editMode}
+                       hasLegs={node.hasLegs}
+                       legWidth={legWidth}
+                       legLength={legLength}
                        >
                    </ArmatureNode>)
             }

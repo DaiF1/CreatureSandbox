@@ -89,10 +89,10 @@ input[type=number]:focus {
     outline: 2px solid white;
 }
 
-#body-input {
+.config-slider-input {
     padding: 3pt;
 
-    max-width: 20pt;
+    width: fit-content;
 }
 
 /* Remove arrows from number inputs */
