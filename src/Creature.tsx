@@ -125,7 +125,8 @@ export function Creature({boneCount = 0,
     const [selectedNode, setSelectedNode] = useState<number>(-1);
     useEffect(() => {
         onSelect({node: head,
-                 updateRadius: (width: number) => { head.radius = width }});
+                 updateRadius: (width: number) => { head.radius = width },
+                 updateLegs: () => {}});
 
         defineReset({
             position: () => updateCreaturePositions(head,
@@ -241,7 +242,8 @@ export function Creature({boneCount = 0,
                      if (editMode) {
                          setSelectedNode(-1);
                          onSelect({node: head,
-                                  updateRadius: (width) => { setHead({ ...head, radius: width }) }});
+                                  updateRadius: (width) => { setHead({ ...head, radius: width }) },
+                                  updateLegs: () => {}});
                      }
                      else setDragging(true);
                  }}
@@ -253,7 +255,8 @@ export function Creature({boneCount = 0,
                      if (editMode) {
                          setSelectedNode(-1);
                          onSelect({node: head,
-                                  updateRadius: (width) => { setHead({ ...head, radius: width }) }});
+                                  updateRadius: (width) => { setHead({ ...head, radius: width }) },
+                                  updateLegs: () => {}});
                      }
                      else setDragging(true);
                  }}
@@ -314,7 +317,8 @@ export function Creature({boneCount = 0,
                        onSelect={() => {
                            setSelectedNode(index)
                            onSelect({node: node,
-                                    updateRadius: (width) => { node.radius = width }});
+                                    updateRadius: (width) => { node.radius = width },
+                                    updateLegs: (state) => { node.hasLegs = state }});
                        }}
                        editMode={editMode}
                        hasLegs={node.hasLegs}

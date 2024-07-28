@@ -8,6 +8,7 @@ import {NodeProps} from './ArmatureNode';
 export interface NodeUpdater {
     node: NodeProps,
     updateRadius: (radius: number) => void,
+    updateLegs: (state: boolean) => void,
 };
 
 export interface ResetMethods {
@@ -24,7 +25,7 @@ function App() {
     const [legWidth, setLegWidth] = useState<number>(15);
 
     const [editMode, setEditMode] = useState<boolean>(false);
-    const [updater, setUpdater] = useState<NodeUpdater>({node: {x: 0, y: 0, radius: 0}, updateRadius: () => {}})
+    const [updater, setUpdater] = useState<NodeUpdater>({node: {}, updateRadius: () => {}, updateLegs: () => {}})
     const [resetMethods, setResetMethods] = useState<ResetMethods>({position: () => {}})
 
     const mobileRatio = window.innerWidth > 900;
@@ -174,6 +175,12 @@ function App() {
                             }}>
                         </input>
                     </div>
+
+                    <label htmlFor="has-legs-input">Has legs: </label>
+                    <input id="has-legs-input" type="checkbox" checked={updater.node.hasLegs} onChange={e => {
+                        updater.updateLegs(e.target.checked);
+                        setUpdater({ ...updater, node: { ...updater.node, hasLegs: e.target.checked } });
+                    }}></input>
                     </>
                     : null
                 }
