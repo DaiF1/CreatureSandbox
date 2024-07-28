@@ -25,7 +25,14 @@ function App() {
     const [legWidth, setLegWidth] = useState<number>(15);
 
     const [editMode, setEditMode] = useState<boolean>(false);
-    const [updater, setUpdater] = useState<NodeUpdater>({node: {}, updateRadius: () => {}, updateLegs: () => {}})
+    const [updater, setUpdater] = useState<NodeUpdater>({node: {
+        x: 0,
+        y: 0,
+        radius: 0,
+        dirX: 0,
+        dirY: 0,
+        hasLegs: false,
+    }, updateRadius: () => {}, updateLegs: () => {}})
     const [resetMethods, setResetMethods] = useState<ResetMethods>({position: () => {}})
 
     const mobileRatio = window.innerWidth > 900;
