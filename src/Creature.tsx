@@ -124,6 +124,7 @@ export function Creature({boneCount = 0,
 
     const [selectedNode, setSelectedNode] = useState<number>(-1);
     useEffect(() => {
+        setSelectedNode(-1);
         onSelect({node: head,
                  updateRadius: (width: number) => { head.radius = width },
                  updateLegs: () => {}});
@@ -133,7 +134,7 @@ export function Creature({boneCount = 0,
                                                     window.innerWidth / 2 - window.innerWidth * 0.1 + boneOffset * 2,
                                                     window.innerHeight / 2),
         });
-    }, []);
+    }, [nodes]);
 
     useEffect(() => {
         if (boneCount - 1 > nodes.length) { // Bone count includes the head. Nodes does not
