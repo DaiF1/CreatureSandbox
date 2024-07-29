@@ -83,8 +83,8 @@ export function ArmatureNode({ x = 0,
                     y: y + (radius - legWidth) * Math.sin(dirTheta - degToRad(90)),
                 }}
                 targetPoint={{
-                    x: x + (radius + legLength) * Math.cos(dirTheta - degToRad(90)) + legLength * Math.cos(dirTheta - degToRad(130)),
-                    y: y + (radius + legLength) * Math.sin(dirTheta - degToRad(90)) + legLength * Math.sin(dirTheta - degToRad(130)),
+                    x: x + (radius - legWidth) * Math.cos(dirTheta - degToRad(90)) + legLength * 2 * Math.cos(dirTheta - degToRad(130)),
+                    y: y + (radius - legWidth) * Math.sin(dirTheta - degToRad(90)) + legLength * 2 * Math.sin(dirTheta - degToRad(130)),
                 }}
                 width={legWidth}
                 length={legLength}
@@ -97,8 +97,8 @@ export function ArmatureNode({ x = 0,
                     y: y + (radius - legWidth) * Math.sin(dirTheta + degToRad(90)),
                 }}
                 targetPoint={{
-                    x: x + (radius - legWidth) * Math.cos(dirTheta + degToRad(90)) + legLength * Math.cos(dirTheta + degToRad(130)),
-                    y: y + (radius - legWidth) * Math.sin(dirTheta + degToRad(90)) + legLength * Math.sin(dirTheta + degToRad(130)),
+                    x: x + (radius - legWidth) * Math.cos(dirTheta + degToRad(90)) + legLength * 2 * Math.cos(dirTheta + degToRad(130)),
+                    y: y + (radius - legWidth) * Math.sin(dirTheta + degToRad(90)) + legLength * 2 * Math.sin(dirTheta + degToRad(130)),
                 }}
                 width={legWidth}
                 length={legLength}

@@ -116,7 +116,7 @@ function App() {
                     </button>
                 </div>
 
-                <p>Leg length</p>
+                <p>Max leg length</p>
                 <div className="config-option">
                     <input className="config-slider-input"
                         type="number"
