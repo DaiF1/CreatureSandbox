@@ -21,7 +21,7 @@ function App() {
     const [creatureColor, setCreatureColor] = useState<string>("#B8DE2F");
     const [eyeRadius, setEyeRadius] = useState<number>(15);
 
-    const [legLength, setLegLength] = useState<number>(35);
+    const [legLength, setLegLength] = useState<number>(30);
     const [legWidth, setLegWidth] = useState<number>(15);
 
     const [editMode, setEditMode] = useState<boolean>(false);
