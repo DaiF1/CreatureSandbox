@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {degToRad} from "./utils";
 
 export interface CreatureLegProps {
     attachPoint: { x: number, y: number },
@@ -17,8 +18,9 @@ export function CreatureLeg({attachPoint, targetPoint, color, width, length}: Cr
         let dy = footLocation.y - attachPoint.y;
 
         let mag = Math.sqrt(dx * dx + dy * dy);
+        let maxLength = length * Math.sin(degToRad(40)) * 2; // Angle used to determine targetPoint
 
-        if (mag > length * 1.5 + width)
+        if (mag > maxLength * 2)
             setFootLocation(targetPoint);
 
         return Math.atan2(dy, dx);

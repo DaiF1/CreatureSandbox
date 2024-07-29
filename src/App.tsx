@@ -141,7 +141,9 @@ function App() {
                         type="number"
                         value={legWidth}
                         onChange={e => {
-                            setLegWidth(Math.max(Number(e.target.value), 1));
+                            let width = Number(e.target.value);
+                            setLegWidth(Math.max(width, 1));
+                            setLegLength(Math.max(legLength, width * 2));
                     }}></input>
                     <input className="config-slider"
                         type="range"
@@ -149,7 +151,9 @@ function App() {
                         max={30}
                         value={legWidth}
                         onChange={(e) => {
-                            setLegWidth(Number(e.target.value));
+                            let width = Number(e.target.value);
+                            setLegWidth(width);
+                            setLegLength(Math.max(legLength, width * 2));
                         }}>
                     </input>
                 </div>
