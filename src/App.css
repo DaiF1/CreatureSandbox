@@ -89,12 +89,6 @@ input[type=number]:focus {
     outline: 2px solid white;
 }
 
-.config-slider-input {
-    padding: 3pt;
-
-    width: fit-content;
-}
-
 /* Remove arrows from number inputs */
 
 input::-webkit-outer-spin-button,
@@ -104,6 +98,15 @@ input::-webkit-inner-spin-button {
 }
 input[type=number]{
     -moz-appearance: textfield;
+}
+
+.config-slider-input {
+    padding: 3pt;
+
+    width: fit-content;
+    max-width: 2em;
+
+    text-align: right;
 }
 
 /* Responsive */
